@@ -168,7 +168,7 @@ function renderSetup() {
     talleres: [5, 7, 8, 9],
     difficulties: ["basico", "intermedio", "avanzado"],
     types: ["mcq", "tf-justify", "tf", "numeric"],
-    count: 10,
+    count: 20,
     timer: 0, // segundos por pregunta, 0 = sin timer
     seed: 0,
   };
@@ -233,8 +233,8 @@ function renderSetup() {
       <h2>4. Configuración del quiz</h2>
       <label class="field" for="count">Número de preguntas</label>
       <select id="count">
-        ${[5, 10, 15, 20, 30].map((n) =>
-          `<option value="${n}" ${cfg.count === n ? "selected" : ""}>${n} preguntas</option>`).join("")}
+        ${[5, 10, 15, 20, 25, 30, 40].map((n) =>
+          `<option value="${n}" ${cfg.count === n ? "selected" : ""}>${n} preguntas${n === 20 ? " (recomendado)" : ""}</option>`).join("")}
         <option value="9999" ${cfg.count === 9999 ? "selected" : ""}>Todas las disponibles</option>
       </select>
       <div class="toggles">
@@ -539,17 +539,18 @@ function renderResults() {
       userTxt = a.userIdx !== undefined ? `${String.fromCharCode(65 + a.userIdx)}. ${q.options[a.userIdx]}` : "(sin respuesta)";
       correctTxt = `${String.fromCharCode(65 + q.correctIdx)}. ${q.options[q.correctIdx]}`;
     }
+    const givenColor = a.correct ? "var(--green)" : "var(--coral)";
     return `<div class="review-item ${a.correct ? "right" : "wrong"}">
       <div class="review-meta">
         <strong>${i + 1}. </strong>
         <span class="tag tag-taller">T${q.taller}</span>
         <span class="tag tag-difficulty ${esc(q.difficulty)}">${esc(q.difficulty)}</span>
-        <span style="margin-left:auto;">${a.correct ? "✓" : "✗"}</span>
+        <span style="margin-left:auto;">${a.correct ? "✓ Correcta" : "✗ Incorrecta"}</span>
       </div>
       <div class="review-q">${q.prompt}</div>
-      <p class="review-given"><strong>Tu respuesta:</strong> ${esc(userTxt)}</p>
-      ${a.correct ? "" : `<p class="review-correct"><strong>Correcta:</strong> ${esc(correctTxt)}</p>`}
-      <p style="margin:6px 0 0;color:var(--muted);font-size:0.88rem">${esc(q.explanation || "")}</p>
+      <p style="color:${givenColor};margin:4px 0 0;font-size:0.9rem;"><strong>Tu respuesta:</strong> ${esc(userTxt)}</p>
+      <p class="review-correct" style="color:var(--green);"><strong>Respuesta correcta:</strong> ${esc(correctTxt)}</p>
+      <p style="margin:6px 0 0;color:var(--muted);font-size:0.88rem">${q.explanation || ""}</p>
       ${q.reference ? `<p style="margin:4px 0 0;color:var(--muted);font-size:0.8rem;font-style:italic;">${esc(q.reference)}</p>` : ""}
     </div>`;
   }).join("");
