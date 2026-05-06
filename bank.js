@@ -423,7 +423,25 @@ const QUESTIONS = [
         prompt: `Si la propensión marginal a consumir es $c = ${c}$, ¿cuál es el multiplicador del gasto público en la cruz keynesiana? (con 2 decimales)`,
         correctValue: mG,
         tolerance: 0.05,
-        explanation: `$\\frac{\\partial Y}{\\partial G} = \\frac{1}{1-c} = \\frac{1}{${(1-c).toFixed(2)}} = ${mG.toFixed(2)}$.`,
+        explanation: `<span class="step"><span class="step-num">1</span>Plantea el equilibrio en la cruz keynesiana</span>
+El equilibrio de bienes ocurre cuando el ingreso $Y$ iguala el gasto planeado $E$:
+<span class="formula">$Y = C + I + G$</span>
+Con consumo $C = a + c(Y - T)$ y $I, G, T$ exógenos:
+<span class="formula">$Y = a + c(Y - T) + I + G$</span>
+
+<span class="step"><span class="step-num">2</span>Despeja $Y$</span>
+$Y - cY = a - cT + I + G$<br/>
+$Y(1 - c) = a - cT + I + G$<br/>
+$Y = \\dfrac{a - cT + I + G}{1 - c}$
+
+<span class="step"><span class="step-num">3</span>Deriva respecto a $G$</span>
+<span class="formula">$\\dfrac{\\partial Y}{\\partial G} = \\dfrac{1}{1 - c}$</span>
+
+<span class="step"><span class="step-num">4</span>Sustituye el valor</span>
+Con $c = ${c}$: $1 - c = ${(1-c).toFixed(2)}$<br/>
+<span class="formula">$\\dfrac{\\partial Y}{\\partial G} = \\dfrac{1}{${(1-c).toFixed(2)}} = ${mG.toFixed(2)}$</span>
+
+<span class="intuition">Cada peso adicional de gasto público genera $${mG.toFixed(2)}$ pesos de ingreso adicional. La razón: el peso inicial se gasta, eso aumenta $Y$, los hogares consumen $c$ veces más, y así sucesivamente (serie geométrica $1 + c + c^2 + \\ldots = 1/(1-c)$).</span>`,
         reference: "Taller 8 · 1.2",
       };
     },
@@ -434,11 +452,22 @@ const QUESTIONS = [
     generate(rng) {
       const c = rng.pick([0.5, 0.6, 0.65, 0.75, 0.8]);
       const mT = -c / (1 - c);
+      const mG = 1 / (1 - c);
       return {
         prompt: `Con $c = ${c}$, ¿cuál es el multiplicador de los impuestos $\\partial Y / \\partial T$ en la cruz keynesiana? (con 2 decimales, incluye el signo)`,
         correctValue: mT,
         tolerance: 0.05,
-        explanation: `$\\frac{\\partial Y}{\\partial T} = \\frac{-c}{1-c} = \\frac{-${c}}{${(1-c).toFixed(2)}} = ${mT.toFixed(2)}$.`,
+        explanation: `<span class="step"><span class="step-num">1</span>Parte del equilibrio</span>
+$Y = \\dfrac{a - cT + I + G}{1 - c}$
+
+<span class="step"><span class="step-num">2</span>Deriva respecto a $T$</span>
+Solo el término $-cT$ depende de $T$:
+<span class="formula">$\\dfrac{\\partial Y}{\\partial T} = \\dfrac{-c}{1 - c}$</span>
+
+<span class="step"><span class="step-num">3</span>Sustituye</span>
+<span class="formula">$\\dfrac{\\partial Y}{\\partial T} = \\dfrac{-${c}}{${(1-c).toFixed(2)}} = ${mT.toFixed(2)}$</span>
+
+<span class="intuition">Por cada peso de impuestos adicional, $Y$ cae $${Math.abs(mT).toFixed(2)}$ pesos. En valor absoluto este multiplicador es <strong>menor</strong> que el del gasto $\\dfrac{1}{1-c} = ${mG.toFixed(2)}$. Razón: un peso de impuestos no se traduce uno a uno en menos consumo (los hogares absorben parte vía menos ahorro), mientras que un peso de gasto público sí se gasta directamente.</span>`,
         reference: "Taller 8 · 1.2",
       };
     },
@@ -488,8 +517,23 @@ const QUESTIONS = [
         prompt: `Con $M = ${M}$, $P = ${P}$, $Y = ${Y}$ y demanda real de saldos $L^d = Y - 40 r$, ¿cuál es la tasa de interés de equilibrio $r$? (en porcentaje, sin signo %, con 2 decimales)`,
         correctValue: r,
         tolerance: 0.05,
-        explanation: `$\\frac{M}{P} = ${realM.toFixed(2)}$. Igualando: $${Y} - 40 r = ${realM.toFixed(2)} \\Rightarrow r = ${r.toFixed(2)}\\%$.`,
-        reference: "Taller 8 · 3.a",
+        explanation: `<span class="step"><span class="step-num">1</span>Plantea el equilibrio del mercado de saldos reales</span>
+La oferta real de dinero debe igualar la demanda:
+<span class="formula">$\\dfrac{M}{P} = L^d(Y, r)$</span>
+
+<span class="step"><span class="step-num">2</span>Calcula la oferta real de dinero</span>
+<span class="formula">$\\dfrac{M}{P} = \\dfrac{${M}}{${P}} = ${realM.toFixed(2)}$</span>
+
+<span class="step"><span class="step-num">3</span>Sustituye en la condición de equilibrio</span>
+La demanda dada es $L^d = Y - 40r$ con $Y = ${Y}$:
+<span class="formula">$${realM.toFixed(2)} = ${Y} - 40 r$</span>
+
+<span class="step"><span class="step-num">4</span>Despeja $r$</span>
+$40 r = ${Y} - ${realM.toFixed(2)} = ${(Y - realM).toFixed(2)}$<br/>
+<span class="formula">$r = \\dfrac{${(Y - realM).toFixed(2)}}{40} = ${r.toFixed(2)}\\%$</span>
+
+<span class="intuition">Como $r$ está en el lado de la demanda con signo negativo, mayor $r$ baja la demanda de dinero. La tasa se ajusta hasta que la cantidad demandada iguala los saldos reales que el BC ofrece ($M/P$).</span>`,
+        reference: "Taller 8 · numeral 3.a",
       };
     },
   }),
@@ -582,12 +626,36 @@ const QUESTIONS = [
       const k = rng.pick([0.2, 0.4, 0.5]);
       const l = rng.pick([20, 40, 60]);
       const m = 1 / ((1 - c) + b * k / l);
+      const oneMinusC = (1 - c).toFixed(2);
+      const bkOverEll = (b * k / l);
+      const denom = (1 - c) + bkOverEll;
+      const keynesMult = 1 / (1 - c);
       return {
         prompt: `En IS-LM con $c = ${c}$, $I = h - ${b} r$, $L^d = ${k} Y - ${l} r$, ¿cuál es el multiplicador del gasto $\\partial Y / \\partial G$? (con 2 decimales)`,
         correctValue: m,
         tolerance: 0.05,
-        explanation: `$\\partial Y / \\partial G = 1 / [(1-c) + b k / \\ell] = 1/[${(1 - c).toFixed(2)} + ${b} \\cdot ${k} / ${l}] = ${m.toFixed(2)}$.`,
-        reference: "Taller 9 · 1.c",
+        explanation: `<span class="step"><span class="step-num">1</span>Identifica la fórmula del multiplicador en IS-LM</span>
+La cruz keynesiana pura ignora que al subir $G$ también sube la tasa de interés $r$, lo cual reduce la inversión (efecto <em>crowding-out</em>). El multiplicador completo en IS-LM cerrada es:
+<span class="formula">$\\dfrac{\\partial Y}{\\partial G} = \\dfrac{1}{(1-c) + \\dfrac{b\\,k}{\\ell}}$</span>
+
+<span class="step"><span class="step-num">2</span>Reconoce los parámetros del problema</span>
+<ul>
+<li>$c = ${c}$ — propensión marginal a consumir</li>
+<li>$b = ${b}$ — sensibilidad de la inversión a $r$ (de $I = h - br$)</li>
+<li>$k = ${k}$ — sensibilidad de la demanda de dinero a $Y$ (de $L^d = kY - \\ell r$)</li>
+<li>$\\ell = ${l}$ — sensibilidad de la demanda de dinero a $r$</li>
+</ul>
+
+<span class="step"><span class="step-num">3</span>Calcula el denominador paso a paso</span>
+Primero $1 - c = 1 - ${c} = ${oneMinusC}$.<br/>
+Luego $\\dfrac{b\\,k}{\\ell} = \\dfrac{${b} \\cdot ${k}}{${l}} = \\dfrac{${(b * k).toFixed(2)}}{${l}} = ${bkOverEll.toFixed(4)}$.<br/>
+Suma del denominador: $(1-c) + \\dfrac{b\\,k}{\\ell} = ${oneMinusC} + ${bkOverEll.toFixed(4)} = ${denom.toFixed(4)}$.
+
+<span class="step"><span class="step-num">4</span>Calcula el multiplicador final</span>
+<span class="formula">$\\dfrac{\\partial Y}{\\partial G} = \\dfrac{1}{${denom.toFixed(4)}} = ${m.toFixed(2)}$</span>
+
+<span class="intuition">El multiplicador keynesiano simple sería $\\dfrac{1}{1-c} = ${keynesMult.toFixed(2)}$. En IS-LM queda más bajo (${m.toFixed(2)}) porque parte del impacto expansivo del gasto público se pierde por la caída de la inversión que provoca el alza de la tasa de interés (crowding-out parcial).</span>`,
+        reference: "Taller 9 · numeral 1.c",
       };
     },
   }),
@@ -760,82 +828,12 @@ const QUESTIONS = [
   // ============================================================
   // TALLER 3 · Sistema monetario (apoyo, opcional)
   // ============================================================
-  Q({
-    id: "t3-p01",
-    taller: 3, topic: "multiplicador-bancario", difficulty: "basico", type: "numeric",
-    generate(rng) {
-      const cr = rng.pick([0.3, 0.4, 0.5, 0.6]);
-      const rr = rng.pick([0.10, 0.15, 0.20, 0.25]);
-      const m = (cr + 1) / (cr + rr);
-      return {
-        prompt: `Si la proporción de efectivo a depósitos es $cr = ${cr}$ y el coeficiente de reservas obligatorias es $rr = ${rr}$, ¿cuál es el multiplicador monetario $m = (cr + 1) / (cr + rr)$? (con 2 decimales)`,
-        correctValue: m,
-        tolerance: 0.05,
-        explanation: `$m = \\frac{cr + 1}{cr + rr} = \\frac{${cr} + 1}{${cr} + ${rr}} = \\frac{${(cr + 1).toFixed(2)}}{${(cr + rr).toFixed(2)}} = ${m.toFixed(2)}$.`,
-        reference: "Pres. 12-14 · sistema monetario",
-      };
-    },
-  }),
-  Q({
-    id: "t3-p02",
-    taller: 3, topic: "oferta-monetaria", difficulty: "basico", type: "numeric",
-    generate(rng) {
-      const B = rng.pick([2000, 3000, 4000, 5000]);
-      const cr = rng.pick([0.4, 0.5, 0.6]);
-      const rr = rng.pick([0.15, 0.20, 0.25]);
-      const m = (cr + 1) / (cr + rr);
-      const M = m * B;
-      return {
-        prompt: `Con base monetaria $B = ${B}$, $cr = ${cr}$ y $rr = ${rr}$, ¿cuál es la oferta monetaria $M = m \\cdot B$? (redondeado al entero)`,
-        correctValue: Math.round(M),
-        tolerance: 5,
-        explanation: `$m = ${m.toFixed(2)}$. $M = m \\cdot B = ${m.toFixed(2)} \\cdot ${B} = ${M.toFixed(0)}$.`,
-        reference: "Pres. 12-14 · sistema monetario",
-      };
-    },
-  }),
-  Q({
-    id: "t3-c01",
-    taller: 3, topic: "hiperinflacion", difficulty: "intermedio", type: "tf-justify",
-    prompt: "La causa fundamental de la mayoría de los procesos de hiperinflación es que el banco central decide imprimir mucho dinero de forma autónoma, sin relación con la política fiscal.",
-    options: [
-      "Falso. El banco central suele imprimir mucho dinero para financiar gasto público y déficit fiscal cuando otras fuentes de financiamiento se agotan.",
-      "Verdadero. El BC en todos los países es independiente y nunca se fija en la política fiscal.",
-      "Verdadero. El BC tiene incentivos para imprimir y obtener utilidades.",
-      "Falso. La hiperinflación se debe únicamente a choques de oferta.",
-    ],
-    correct: 0,
-    explanation: "Históricamente la hiperinflación nace cuando el BC pierde independencia y monetiza déficit fiscales (Alemania 1923, Hungría 1946, Zimbabue 2008, Venezuela 2017+).",
-    reference: "Pres. 18 BR · independencia",
-  }),
-
+      
   // ============================================================
   // Preguntas adicionales tipo PIB / PNB / contabilidad nacional
   // (Taller 0/2, presentaciones 05-07)
   // ============================================================
-  Q({
-    id: "t7-c08",
-    taller: 7, topic: "pib-pnb", difficulty: "basico", type: "mcq",
-    prompt: "Cuando un turista extranjero paga una comida en un restaurante nacional, ¿qué pasa con el Producto Nacional Bruto (PNB) del país?",
-    options: [
-      "Aumenta. Si bien la actividad ocurre dentro del país, el ingreso lo recibe un residente nacional (el dueño del restaurante).",
-      "No cambia. El gasto del turista es gasto exterior y no afecta al PNB.",
-      "Disminuye porque el dinero entra y sale del país.",
-      "Es incierto, necesitamos más información.",
-    ],
-    correct: 0,
-    explanation: "El PNB mide ingreso de los nacionales independientemente del territorio donde se genere. Como el restaurante es nacional, sus utilidades suben y el PNB sube.",
-    reference: "Pres. 05-07 · contabilidad nacional",
-  }),
-  Q({
-    id: "t7-tf03",
-    taller: 7, topic: "pib-pnb", difficulty: "basico", type: "tf",
-    prompt: "Si una persona compra un automóvil usado en un concesionario, el valor total del automóvil se suma al PIB del año en curso.",
-    correct: false,
-    explanation: "El PIB mide producción del año en curso. El auto usado ya se contó cuando fue producido. Sólo se suma el margen de comercialización del concesionario, que es un servicio nuevo.",
-    reference: "Pres. 05-07 · contabilidad nacional",
-  }),
-  Q({
+      Q({
     id: "t7-tf04",
     taller: 7, topic: "produccion-cd", difficulty: "intermedio", type: "tf",
     prompt: "Si la función de producción tiene rendimientos constantes a escala y los factores reciben su producto marginal, todos los ingresos provenientes del producto se destinan al pago de los factores (capital y trabajo).",
@@ -1098,8 +1096,23 @@ const QUESTIONS = [
         prompt: `Considere una economía cerrada con producción agregada $Y = ${Y}$, impuestos $T = ${T}$ y función de consumo $C = ${a} + ${c}(Y - T)$. Calcule el <strong>Consumo (C) de equilibrio</strong>:`,
         correctValue: C,
         tolerance: 5,
-        explanation: `$C = ${a} + ${c}(${Y} - ${T}) = ${a} + ${c} \\cdot ${Y - T} = ${C}$.`,
-        reference: "IS-LM cerrada · cálculo de C",
+        explanation: `<span class="step"><span class="step-num">1</span>Identifica la función de consumo</span>
+<span class="formula">$C = a + c (Y - T)$</span>
+donde:
+<ul>
+<li>$a = ${a}$ — consumo autónomo</li>
+<li>$c = ${c}$ — propensión marginal a consumir</li>
+<li>$Y - T$ — ingreso disponible</li>
+</ul>
+
+<span class="step"><span class="step-num">2</span>Calcula el ingreso disponible</span>
+<span class="formula">$Y - T = ${Y} - ${T} = ${Y - T}$</span>
+
+<span class="step"><span class="step-num">3</span>Sustituye y calcula</span>
+<span class="formula">$C = ${a} + ${c} \\cdot ${Y - T} = ${a} + ${(c * (Y - T)).toFixed(0)} = ${C}$</span>
+
+<span class="intuition">El consumo de equilibrio sólo depende del ingreso disponible (no del gasto público $G$). Por eso, en los ejercicios de política fiscal, $C$ no cambia si $T$ se mantiene constante — aunque $G$ cambie.</span>`,
+        reference: "Taller 9 · numeral 1.b",
       };
     },
   }),
@@ -1160,8 +1173,22 @@ const QUESTIONS = [
         prompt: `Con la economía anterior y función de inversión $I = ${I0} - ${I1} r$ (donde $r$ está en porcentaje, ej. $r = 10$ significa 10%), $Y = ${Y}$, $T = ${T}$, $G = ${G}$, $C = ${a} + ${c}(Y - T)$. ¿Cuál es la <strong>tasa de interés real $r$ de equilibrio</strong>?`,
         correctValue: r,
         tolerance: 0.5,
-        explanation: `$C = ${C}$, $I = S = ${I}$. Despejando $r$: $${I0} - ${I1} r = ${I} \\Rightarrow r = (${I0} - ${I})/${I1} = ${r.toFixed(1)}\\%$.`,
-        reference: "IS-LM cerrada · r despejado de I = S",
+        explanation: `<span class="step"><span class="step-num">1</span>Calcula consumo y ahorro nacional</span>
+$C = ${a} + ${c}(${Y} - ${T}) = ${C}$<br/>
+$S = Y - C - G = ${Y} - ${C} - ${G} = ${(Y - C - G)}$
+
+<span class="step"><span class="step-num">2</span>Aplica el equilibrio del mercado de fondos prestables</span>
+En una economía cerrada, $S = I$:
+<span class="formula">$I = S = ${I}$</span>
+
+<span class="step"><span class="step-num">3</span>Despeja $r$ de la función de inversión</span>
+La función dada es $I = ${I0} - ${I1} r$. Sustituyendo $I = ${I}$:
+<span class="formula">$${I0} - ${I1} r = ${I}$</span>
+$${I1} r = ${I0} - ${I} = ${(I0 - I)}$<br/>
+<span class="formula">$r = \\dfrac{${(I0 - I)}}{${I1}} = ${r.toFixed(1)}\\%$</span>
+
+<span class="intuition">La tasa de interés real es el "precio" que iguala el ahorro deseado con la inversión deseada. Cuando $G$ sube (manteniendo $T$), $S$ cae (porque $S = Y - C - G$ y $Y, C$ no cambian), entonces $I$ cae también, y eso requiere una $r$ más alta.</span>`,
+        reference: "Taller 9 · numeral 1.b",
       };
     },
   }),
@@ -1204,24 +1231,43 @@ const QUESTIONS = [
     id: "t9-pb-fiscal",
     taller: 9, topic: "is-lm-shock", difficulty: "avanzado", type: "numeric",
     generate(rng) {
-      // Política fiscal expansiva: G sube manteniendo T y Y fijos.
-      // Y, T, C no cambian (porque C depende de Y-T, no de G).
-      // I baja porque I = Y - C - G, con G mayor → I menor → r sube
       const Y = 8000;
       const T = 2000;
       const G_old = rng.pick([1500, 1200]);
       const G_new = rng.pick([2000, 2500, 3000]);
       const a = 1000; const c = 0.5;
       const C = a + c * (Y - T);
+      const I_old = Y - C - G_old;
       const I_new = Y - C - G_new;
       const I0 = 3000; const I1 = 100;
+      const r_old = (I0 - I_old) / I1;
       const r_new = (I0 - I_new) / I1;
       return {
-        prompt: `Economía cerrada con $Y = ${Y}$, $T = ${T}$, $C = ${a} + ${c}(Y - T)$, $I = ${I0} - ${I1} r$. El gobierno hace política fiscal expansiva subiendo $G$ de $${G_old}$ a $${G_new}$ (manteniendo $T$). ¿Cuál es la <strong>nueva tasa de interés real $r$</strong>?`,
+        prompt: `Economía cerrada con $Y = ${Y}$ (largo plazo, fijo), $T = ${T}$, $C = ${a} + ${c}(Y - T)$, $I = ${I0} - ${I1} r$. El gobierno hace política fiscal expansiva subiendo $G$ de $${G_old}$ a $${G_new}$ (manteniendo $T$). ¿Cuál es la <strong>nueva tasa de interés real $r$</strong>?`,
         correctValue: r_new,
         tolerance: 0.5,
-        explanation: `$C = ${C}$ (no cambia con G). $I_{new} = Y - C - G_{new} = ${Y} - ${C} - ${G_new} = ${I_new}$. $r_{new} = (${I0} - ${I_new}) / ${I1} = ${r_new.toFixed(1)}\\%$. Crowding-out: ↑G ⇒ ↓I ⇒ ↑r.`,
-        reference: "IS-LM cerrada · choque fiscal · estilo Punto C",
+        explanation: `<span class="step"><span class="step-num">1</span>¿Qué cambia y qué no cambia?</span>
+<ul>
+<li>$Y$ no cambia (está fijo en LP por la dotación de factores).</li>
+<li>$T$ no cambia (sólo aumenta $G$).</li>
+<li>$C$ no cambia: depende sólo de $Y - T = ${Y - T}$, que no se altera. $C = ${C}$.</li>
+<li>$I$ debe cambiar: como $S = Y - C - G$ y $G$ sube, $S$ baja, y por equilibrio $S = I$, entonces $I$ baja.</li>
+</ul>
+
+<span class="step"><span class="step-num">2</span>Calcula la nueva inversión por equilibrio $S = I$</span>
+<span class="formula">$I_{nueva} = Y - C - G_{nueva} = ${Y} - ${C} - ${G_new} = ${I_new}$</span>
+
+<span class="step"><span class="step-num">3</span>Despeja $r$ de la función de inversión</span>
+$I = ${I0} - ${I1} r$, sustituyendo $I = ${I_new}$:
+$${I1} r = ${I0} - ${I_new} = ${(I0 - I_new)}$<br/>
+<span class="formula">$r_{nueva} = \\dfrac{${(I0 - I_new)}}{${I1}} = ${r_new.toFixed(1)}\\%$</span>
+
+<span class="step"><span class="step-num">4</span>Compara con la tasa inicial</span>
+Antes: $r_{inicial} = (${I0} - ${I_old})/${I1} = ${r_old.toFixed(1)}\\%$<br/>
+$\\Delta r = ${r_new.toFixed(1)} - ${r_old.toFixed(1)} = ${(r_new - r_old).toFixed(1)}$ pp.
+
+<span class="intuition"><strong>Crowding-out total</strong> en LP: como $Y$ está fijo, todo aumento de $G$ desplaza inversión peso por peso. La tasa de interés sube exactamente lo necesario para que la inversión caiga en la misma magnitud que aumenta $G$.</span>`,
+        reference: "Taller 9 · numeral 1.c (extensión)",
       };
     },
   }),
@@ -1710,65 +1756,7 @@ const QUESTIONS = [
   }),
 
   // ---- T3 · Sistema monetario (más preguntas) ----
-  Q({
-    id: "t3-c02",
-    taller: 3, topic: "sistema-monetario", difficulty: "basico", type: "mcq",
-    prompt: "La base monetaria B se define como:",
-    options: [
-      "Efectivo en manos del público + reservas de los bancos en el banco central.",
-      "Solamente el efectivo en manos del público.",
-      "Cantidad total de dinero (M) más los bonos.",
-      "Activos del banco central menos pasivos.",
-    ],
-    correct: 0,
-    explanation: "B = E + R. Es el pasivo del BC controlable directamente vía operaciones de mercado abierto.",
-    reference: "Pres. 12-13 · sistema monetario",
-  }),
-  Q({
-    id: "t3-c03",
-    taller: 3, topic: "sistema-monetario", difficulty: "basico", type: "mcq",
-    prompt: "Una operación de mercado abierto en la que el banco central COMPRA bonos al sector privado:",
-    options: [
-      "Aumenta la base monetaria B y, vía multiplicador, expande la oferta de dinero M.",
-      "Disminuye B y contrae M.",
-      "No afecta B pero baja M.",
-      "Sólo afecta la tasa de interés sin cambiar M.",
-    ],
-    correct: 0,
-    explanation: "Comprar bonos = inyectar moneda al público = ↑B. Vía multiplicador m, M = mB sube proporcionalmente.",
-    reference: "Pres. 12-13 · OMA",
-  }),
-  Q({
-    id: "t3-tf01",
-    taller: 3, topic: "multiplicador-bancario", difficulty: "intermedio", type: "tf",
-    prompt: "Un aumento en el coeficiente de reservas obligatorias (rr) reduce el multiplicador monetario.",
-    correct: true,
-    explanation: "m = (cr+1)/(cr+rr). Si rr sube, denominador sube y m baja: los bancos pueden prestar menos por cada peso de reservas.",
-    reference: "Pres. 13 · multiplicador",
-  }),
-  Q({
-    id: "t3-c04",
-    taller: 3, topic: "inflacion", difficulty: "intermedio", type: "mcq",
-    prompt: "Si en el largo plazo la velocidad V y el producto Y son constantes, la teoría cuantitativa MV = PY implica que la inflación π es:",
-    options: [
-      "Aproximadamente igual a la tasa de crecimiento de M (π ≈ ΔM/M).",
-      "Independiente de M.",
-      "Igual a la tasa de crecimiento de Y.",
-      "Siempre cero.",
-    ],
-    correct: 0,
-    explanation: "Tomando logs y derivando: ΔM/M + ΔV/V = ΔP/P + ΔY/Y. Si ΔV = ΔY = 0, entonces π ≈ ΔM/M.",
-    reference: "Pres. 14-15 · teoría cuantitativa",
-  }),
-  Q({
-    id: "t3-tf02",
-    taller: 3, topic: "hiperinflacion", difficulty: "basico", type: "tf",
-    prompt: "La independencia del banco central reduce el riesgo de hiperinflación porque limita la monetización de déficits fiscales.",
-    correct: true,
-    explanation: "BC independiente puede negarse a financiar déficit fiscal vía emisión, eliminando la causa fundamental de la mayoría de las hiperinflaciones históricas.",
-    reference: "Pres. 18 · BR independencia",
-  }),
-
+          
   // ---- Mezcla / casos cross-tema ----
   Q({
     id: "t9-c16",
@@ -1817,8 +1805,670 @@ const QUESTIONS = [
       "No es posible determinar sin más información.",
     ],
     correct: 0,
-    explanation: "u_obs − u_nat = − brecha / β = − 6/2 = −3 pp. El producto está sobrecalentado; el desempleo está bajo el natural.",
+    explanation: `<span class="step"><span class="step-num">1</span>Recuerda la Ley de Okun</span>
+La Ley de Okun relaciona la brecha del producto con la brecha de desempleo:
+<span class="formula">$u - u^N = -\\dfrac{1}{\\beta}\\,\\dfrac{Y - Y^*}{Y^*}$</span>
+donde $\\beta$ es el coeficiente de Okun (cuánto cambia $Y$ por cada punto extra de desempleo).
+
+<span class="step"><span class="step-num">2</span>Sustituye los datos</span>
+$\\beta = 2$, brecha del producto $= +6\\%$ (observado por encima del potencial).
+
+<span class="step"><span class="step-num">3</span>Calcula la brecha de desempleo</span>
+<span class="formula">$u - u^N = -\\dfrac{6}{2} = -3\\text{ pp}$</span>
+
+<span class="intuition">Si la economía está "sobrecalentada" (produce más de lo potencial), las firmas contratan más, así que el desempleo cae <em>por debajo</em> del natural. El signo negativo refleja la relación inversa entre producto y desempleo.</span>`,
     reference: "Pres. 27 · Okun",
+  }),
+
+  // ---- BATCH NUEVO · T5 (Solow / Cobb-Douglas) ----
+  Q({
+    id: "t5-p07",
+    taller: 5, topic: "solow-ss", difficulty: "intermedio", type: "open-numeric",
+    prompt: "Considera el modelo de Solow con producción $y = k^{\\alpha}$, $\\alpha = 1/3$, tasa de ahorro $s = 0{,}30$, depreciación $\\delta = 0{,}05$ y crecimiento poblacional $n = 0{,}01$. Calcula el capital por trabajador en estado estacionario $k^*$ (a 2 decimales).",
+    correct: 11.18,
+    tolerance: 0.1,
+    explanation: `<span class="step"><span class="step-num">1</span>Condición de estado estacionario en Solow</span>
+En el estado estacionario, la inversión por trabajador iguala la depreciación efectiva más la dilución poblacional:
+<span class="formula">$s\\,f(k^*) = (\\delta + n)\\,k^*$</span>
+Con $f(k) = k^{\\alpha}$:
+<span class="formula">$s\\,(k^*)^{\\alpha} = (\\delta + n)\\,k^*$</span>
+
+<span class="step"><span class="step-num">2</span>Despeja $k^*$</span>
+Divide ambos lados por $(k^*)^{\\alpha}$:
+<span class="formula">$s = (\\delta + n)\\,(k^*)^{1-\\alpha} \\;\\;\\Rightarrow\\;\\; k^* = \\left(\\dfrac{s}{\\delta + n}\\right)^{\\frac{1}{1-\\alpha}}$</span>
+
+<span class="step"><span class="step-num">3</span>Sustituye valores</span>
+<ul>
+<li>$\\dfrac{s}{\\delta+n} = \\dfrac{0{,}30}{0{,}05 + 0{,}01} = \\dfrac{0{,}30}{0{,}06} = 5$</li>
+<li>$\\dfrac{1}{1-\\alpha} = \\dfrac{1}{1 - 1/3} = \\dfrac{1}{2/3} = \\dfrac{3}{2} = 1{,}5$</li>
+</ul>
+
+<span class="step"><span class="step-num">4</span>Calcula el resultado</span>
+<span class="formula">$k^* = 5^{1{,}5} = 5 \\cdot \\sqrt{5} \\approx 5 \\cdot 2{,}236 \\approx 11{,}18$</span>
+
+<span class="intuition">A mayor $s$, mayor $k^*$ (se ahorra más, se acumula más capital). A mayor $\\delta + n$, menor $k^*$ (el capital se deprecia o se diluye más rápido entre nuevos trabajadores). En equilibrio, lo ahorrado tiene que cubrir exactamente la "fuga" de capital por depreciación + nuevos trabajadores.</span>`,
+    reference: "Pres. 21-22 · Solow",
+  }),
+  Q({
+    id: "t5-c12",
+    taller: 5, topic: "solow-regla-oro", difficulty: "intermedio", type: "mcq",
+    prompt: "En el modelo de Solow, la 'regla de oro' del capital ($k^{**}$) corresponde al nivel de capital por trabajador que:",
+    options: [
+      "Maximiza el consumo por trabajador en estado estacionario.",
+      "Maximiza la producción por trabajador en estado estacionario.",
+      "Minimiza la depreciación.",
+      "Garantiza inversión nula.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Define $c^*$ en estado estacionario</span>
+El consumo por trabajador en estado estacionario es lo que queda de la producción tras descontar la inversión que repone capital:
+<span class="formula">$c^* = f(k^*) - (\\delta + n)\\,k^*$</span>
+
+<span class="step"><span class="step-num">2</span>Maximiza $c^*$ con respecto a $k^*$</span>
+Tomamos derivada e igualamos a cero:
+<span class="formula">$f'(k^{**}) = \\delta + n$</span>
+Esa es la <strong>regla de oro</strong>: el producto marginal del capital iguala la tasa de depreciación efectiva.
+
+<span class="step"><span class="step-num">3</span>¿Por qué no maximizar $f(k)$?</span>
+Si solo acumularas capital sin tope, podrías llevar $k^*$ muy alto y producir mucho, pero todo iría a reponer capital depreciado: el consumo terminaría cayendo. Hay un <em>punto óptimo</em> donde el consumo es máximo.
+
+<span class="intuition">Ahorrar más siempre aumenta $k^*$ y $y^*$, pero NO siempre aumenta $c^*$. Pasada la regla de oro, ahorrar más solo financia más depreciación. Lo que importa para el bienestar es el consumo, no la producción bruta.</span>`,
+    reference: "Pres. 22 · regla de oro",
+  }),
+  Q({
+    id: "t5-c13",
+    taller: 5, topic: "cobb-douglas", difficulty: "basico", type: "mcq",
+    prompt: "Una función Cobb-Douglas $Y = A\\,K^{\\alpha} L^{1-\\alpha}$ tiene rendimientos constantes a escala porque:",
+    options: [
+      "Los exponentes de $K$ y $L$ suman 1.",
+      "$A$ es una constante.",
+      "$\\alpha < 1$ siempre.",
+      "Los factores se pueden sustituir.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Definición de rendimientos constantes a escala (RCE)</span>
+Una función $F(K,L)$ tiene RCE si al multiplicar todos los factores por $\\lambda > 0$, el producto se multiplica por $\\lambda$:
+<span class="formula">$F(\\lambda K, \\lambda L) = \\lambda\\,F(K,L)$</span>
+
+<span class="step"><span class="step-num">2</span>Aplica a Cobb-Douglas</span>
+<span class="formula">$A(\\lambda K)^{\\alpha} (\\lambda L)^{1-\\alpha} = A\\,\\lambda^{\\alpha}\\,\\lambda^{1-\\alpha}\\,K^{\\alpha} L^{1-\\alpha} = \\lambda^{\\alpha + (1-\\alpha)}\\,Y = \\lambda\\,Y$</span>
+Funciona <em>únicamente</em> porque los exponentes suman 1.
+
+<span class="step"><span class="step-num">3</span>¿Qué pasaría si sumaran &lt; 1 o &gt; 1?</span>
+<ul>
+<li>Si $\\alpha + \\beta &lt; 1$: rendimientos <em>decrecientes</em> (duplicar factores menos que duplica $Y$).</li>
+<li>Si $\\alpha + \\beta &gt; 1$: rendimientos <em>crecientes</em> (duplicar factores más que duplica $Y$).</li>
+</ul>
+
+<span class="intuition">RCE es la base del Solow estándar: permite escribir todo en términos per cápita ($y = f(k)$) sin perder información, porque al dividir por $L$ los exponentes se cancelan limpiamente.</span>`,
+    reference: "Pres. 19 · Cobb-Douglas",
+  }),
+  Q({
+    id: "t5-tf06",
+    taller: 5, topic: "solow-ss", difficulty: "intermedio", type: "tf-justify",
+    prompt: "En Solow con tecnología constante, un aumento permanente de la tasa de ahorro $s$ eleva la tasa de crecimiento del producto en el largo plazo.",
+    options: [
+      "Falso. Eleva el nivel de $k^*$ y $y^*$, pero no la tasa de crecimiento de largo plazo.",
+      "Verdadero. Más ahorro implica crecimiento permanente más alto.",
+      "Falso. El aumento de $s$ no afecta el producto.",
+      "Verdadero, pero solo si $s &gt; \\delta$.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Distinción clave: nivel vs tasa de crecimiento</span>
+En Solow sin progreso técnico, la economía converge a un estado estacionario donde $k$ y $y$ son <em>constantes</em> en el largo plazo. La tasa de crecimiento de $y$ por trabajador es <strong>cero</strong> en el SS, sin importar cuál sea $s$.
+
+<span class="step"><span class="step-num">2</span>Efecto de subir $s$</span>
+Recordemos $k^* = (s/(\\delta+n))^{1/(1-\\alpha)}$. Subir $s$ eleva $k^*$ y por tanto $y^*$, pero el sistema vuelve a converger a un nuevo SS donde la tasa de crecimiento per cápita vuelve a ser 0.
+
+<span class="step"><span class="step-num">3</span>Durante la transición sí hay crecimiento</span>
+Mientras la economía pasa del SS viejo al nuevo, $y$ crece. Pero ese crecimiento es transitorio y va decayendo conforme $k$ se acerca al nuevo $k^*$.
+
+<span class="intuition">Solow básico no genera crecimiento sostenido a partir del ahorro. Para crecimiento sostenido se necesita progreso técnico ($g_A &gt; 0$). Por eso los modelos endógenos (AK, Romer) modifican supuestos: para que el ahorro tenga efectos permanentes en la tasa de crecimiento, hace falta evitar los rendimientos decrecientes del capital.</span>`,
+    reference: "Pres. 22-23 · Solow propiedades",
+  }),
+
+  // ---- BATCH NUEVO · T7 (Inflación, dinero, desempleo) ----
+  Q({
+    id: "t7-c17",
+    taller: 7, topic: "ecuacion-cuantitativa", difficulty: "basico", type: "mcq",
+    prompt: "La ecuación cuantitativa del dinero es $M\\,V = P\\,Y$. Si $V$ es constante y $Y$ crece a 3% anual, ¿qué crecimiento de $M$ es compatible con inflación de 2%?",
+    options: [
+      "5%",
+      "1%",
+      "6%",
+      "−1%",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Toma logaritmos y diferencia la ecuación cuantitativa</span>
+Partiendo de $M\\,V = P\\,Y$ y aplicando log y derivada temporal:
+<span class="formula">$\\hat{M} + \\hat{V} = \\hat{P} + \\hat{Y}$</span>
+donde $\\hat{X}$ denota la tasa de crecimiento de $X$.
+
+<span class="step"><span class="step-num">2</span>Aplica el supuesto $V$ constante</span>
+$\\hat{V} = 0$, así que:
+<span class="formula">$\\hat{M} = \\hat{P} + \\hat{Y} = \\pi + g_Y$</span>
+
+<span class="step"><span class="step-num">3</span>Sustituye los datos</span>
+<ul>
+<li>$\\pi = 2\\%$ (inflación)</li>
+<li>$g_Y = 3\\%$ (crecimiento del producto real)</li>
+</ul>
+<span class="formula">$\\hat{M} = 2\\% + 3\\% = 5\\%$</span>
+
+<span class="intuition">Esta es la "regla del banquero": para mantener inflación estable, la cantidad de dinero debe crecer al ritmo de la economía real más la inflación deseada. Si $M$ crece más rápido, hay exceso de dinero persiguiendo bienes y la inflación sube.</span>`,
+    reference: "Pres. 24 · ecuación cuantitativa",
+  }),
+  Q({
+    id: "t7-p06",
+    taller: 7, topic: "fisher", difficulty: "basico", type: "open-numeric",
+    prompt: "La tasa de interés nominal anual es 8% y la inflación esperada es 5%. Aproxima la tasa de interés real $r$ usando la identidad de Fisher (en %, sin signo).",
+    correct: 3,
+    tolerance: 0.05,
+    explanation: `<span class="step"><span class="step-num">1</span>Identidad de Fisher (aproximación lineal)</span>
+<span class="formula">$i \\approx r + \\pi^e$</span>
+donde $i$ es la tasa nominal, $r$ la real y $\\pi^e$ la inflación esperada.
+
+<span class="step"><span class="step-num">2</span>Despeja $r$</span>
+<span class="formula">$r \\approx i - \\pi^e$</span>
+
+<span class="step"><span class="step-num">3</span>Sustituye</span>
+<span class="formula">$r \\approx 8\\% - 5\\% = 3\\%$</span>
+
+<span class="step"><span class="step-num">4</span>Versión exacta (referencia)</span>
+La identidad exacta es $1 + i = (1 + r)(1 + \\pi^e)$, que da $r = (1{,}08/1{,}05) - 1 \\approx 2{,}857\\%$. La aproximación lineal es válida para tasas pequeñas.
+
+<span class="intuition">La tasa real es lo que de verdad gana el ahorrador: el interés nominal menos el desgaste por inflación. Si $\\pi^e &gt; i$, $r$ es negativa: prestar pierde poder de compra.</span>`,
+    reference: "Pres. 25 · Fisher",
+  }),
+  Q({
+    id: "t7-c18",
+    taller: 7, topic: "tipos-desempleo", difficulty: "basico", type: "mcq",
+    prompt: "El desempleo <em>friccional</em> se refiere a:",
+    options: [
+      "Trabajadores que están temporalmente entre empleos por procesos normales de búsqueda y emparejamiento.",
+      "Personas que pierden el empleo por un cambio estructural permanente en la economía.",
+      "Personas que no buscan trabajo activamente.",
+      "Trabajadores despedidos por una recesión cíclica.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Tres tipos clásicos de desempleo</span>
+<ul>
+<li><strong>Friccional</strong>: tiempo natural que toma encontrar un nuevo empleo (cambio de carrera, mudanza, búsqueda).</li>
+<li><strong>Estructural</strong>: desajuste entre habilidades del trabajador y vacantes existentes (cambio tecnológico, sectores en declive).</li>
+<li><strong>Cíclico</strong>: por fluctuaciones de la demanda agregada en recesiones.</li>
+</ul>
+
+<span class="step"><span class="step-num">2</span>El desempleo natural $u^N$</span>
+Por convención, $u^N = $ friccional + estructural. El desempleo cíclico es la <em>brecha</em> $u - u^N$.
+
+<span class="step"><span class="step-num">3</span>Modelo de flujos</span>
+En el modelo $u^N = s/(s+f)$, donde $s$ es la tasa de separación y $f$ la de búsqueda exitosa, el desempleo en estado estacionario es siempre positivo: <strong>siempre hay algo de desempleo friccional</strong> incluso en pleno empleo.
+
+<span class="intuition">El desempleo natural NO es cero. Una economía sana tiene 4-6% de desempleo "natural" porque es saludable que la gente se mueva entre empleos. Solo se preocupa cuando $u &gt; u^N$ (brecha cíclica).</span>`,
+    reference: "Pres. 26 · tipos de desempleo",
+  }),
+  Q({
+    id: "t7-tf07",
+    taller: 7, topic: "fisher", difficulty: "intermedio", type: "tf-justify",
+    prompt: "Si la inflación esperada $\\pi^e$ sube en 2 pp y el banco central no ajusta la tasa nominal $i$, la tasa real $r$ <em>cae</em> en aproximadamente 2 pp.",
+    options: [
+      "Verdadero. Por Fisher $r = i - \\pi^e$, si $i$ no cambia y $\\pi^e \\uparrow$, entonces $r \\downarrow$.",
+      "Falso. La tasa real depende solo del crecimiento.",
+      "Falso. La tasa real subiría.",
+      "Verdadero, pero solo si la economía está en recesión.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Identidad de Fisher</span>
+<span class="formula">$r = i - \\pi^e$</span>
+
+<span class="step"><span class="step-num">2</span>Diferencia totales</span>
+$\\Delta r = \\Delta i - \\Delta \\pi^e$. Con $\\Delta i = 0$ y $\\Delta \\pi^e = +2$ pp:
+<span class="formula">$\\Delta r = 0 - 2 = -2\\text{ pp}$</span>
+
+<span class="step"><span class="step-num">3</span>¿Es deseable?</span>
+Si la economía está sobrecalentada, dejar caer $r$ es procíclico (estimula aún más). Por eso el banco central suele aplicar la <em>regla de Taylor</em> y subir $i$ en respuesta a $\\pi^e \\uparrow$, manteniendo $r$ estable o subiendo.
+
+<span class="intuition">Cuando el banco central "no hace nada" frente a expectativas inflacionarias, está implícitamente <em>estimulando</em> la economía: el costo real de pedir prestado cae. Por eso la regla de Taylor pide reaccionar con un coeficiente $&gt; 1$ a la inflación.</span>`,
+    reference: "Pres. 25-30 · Fisher / Taylor",
+  }),
+  Q({
+    id: "t7-c19",
+    taller: 7, topic: "deflactor", difficulty: "intermedio", type: "mcq",
+    prompt: "El <em>deflactor del PIB</em> en un año dado se calcula como:",
+    options: [
+      "$\\dfrac{\\text{PIB nominal}}{\\text{PIB real}} \\times 100$",
+      "$\\dfrac{\\text{PIB real}}{\\text{PIB nominal}} \\times 100$",
+      "El IPC dividido por la tasa de inflación.",
+      "La diferencia entre PIB y PNB.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Definición</span>
+<span class="formula">$\\text{Deflactor} = \\dfrac{\\text{PIB nominal}}{\\text{PIB real}} \\times 100$</span>
+El PIB nominal usa precios corrientes; el PIB real usa precios de un año base. La razón mide cómo subieron los precios en promedio.
+
+<span class="step"><span class="step-num">2</span>Diferencia con el IPC</span>
+El IPC mide el costo de una canasta fija de consumo. El deflactor incluye <em>todo</em> lo que se produce internamente (consumo, inversión, gobierno, exportaciones), con ponderaciones que cambian año a año.
+
+<span class="step"><span class="step-num">3</span>Inflación implícita</span>
+La tasa de variación del deflactor año a año es una medida amplia de inflación.
+
+<span class="intuition">Si en el año base PIB nominal = PIB real → deflactor = 100. Si en años siguientes los precios suben, el numerador crece más rápido que el denominador y el deflactor sube por encima de 100.</span>`,
+    reference: "Pres. 23 · medición de precios",
+  }),
+
+  // ---- BATCH NUEVO · T8 (IS-LM, política fiscal y monetaria) ----
+  Q({
+    id: "t8-p07",
+    taller: 8, topic: "is-lm", difficulty: "intermedio", type: "open-numeric",
+    prompt: "En IS-LM, la curva IS es $Y = 1000 - 50\\,r$ y la curva LM es $Y = 600 + 50\\,r$ (con $r$ en %). Calcula la tasa de interés de equilibrio $r^*$ (en %, sin signo).",
+    correct: 4,
+    tolerance: 0.05,
+    explanation: `<span class="step"><span class="step-num">1</span>Igualar IS y LM</span>
+En equilibrio simultáneo de bienes y dinero, el producto $Y$ y la tasa $r$ son iguales en ambas curvas:
+<span class="formula">$1000 - 50r = 600 + 50r$</span>
+
+<span class="step"><span class="step-num">2</span>Despeja $r$</span>
+<span class="formula">$1000 - 600 = 50r + 50r \\;\\;\\Rightarrow\\;\\; 400 = 100r \\;\\;\\Rightarrow\\;\\; r = 4$</span>
+
+<span class="step"><span class="step-num">3</span>Verifica con $Y$</span>
+$Y = 1000 - 50(4) = 800$. También $Y = 600 + 50(4) = 800$. Coincide. ✓
+
+<span class="intuition">La IS pendiente negativa: a mayor $r$, menor inversión y menor demanda → menor $Y$. La LM pendiente positiva: a mayor $r$, menor demanda de dinero, así que se requiere más $Y$ para que la demanda se mantenga igual a la oferta de dinero. Donde se cruzan, el mercado de bienes y el de dinero están simultáneamente en equilibrio.</span>`,
+    reference: "Pres. 32 · IS-LM equilibrio",
+  }),
+  Q({
+    id: "t8-c18",
+    taller: 8, topic: "is-lm-shock", difficulty: "intermedio", type: "mcq",
+    prompt: "En IS-LM con LM convencional (no horizontal ni vertical), una expansión monetaria ($\\uparrow M^s$) produce:",
+    options: [
+      "$\\uparrow Y$ y $\\downarrow r$.",
+      "$\\uparrow Y$ y $\\uparrow r$.",
+      "$\\downarrow Y$ y $\\downarrow r$.",
+      "$Y$ y $r$ no cambian.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>¿Qué hace $\\uparrow M^s$ en LM?</span>
+Recordemos LM: $\\dfrac{M}{P} = k\\,Y - \\ell\\,r$ (demanda real de dinero $= $ oferta real). Si $M^s$ sube y $P$ está fijo (corto plazo), aparece exceso de oferta de dinero: la gente quiere deshacerse de los saldos extra. Esto desplaza LM hacia la <em>derecha</em> (a la misma $r$, $Y$ tiene que ser mayor para absorber el dinero extra).
+
+<span class="step"><span class="step-num">2</span>Movimiento sobre IS</span>
+Con LM hacia la derecha y IS fija, el equilibrio se mueve a lo largo de IS hacia abajo y a la derecha: $\\downarrow r$, $\\uparrow Y$.
+
+<span class="step"><span class="step-num">3</span>Mecanismo económico</span>
+Más dinero → la tasa de interés cae → la inversión $I = \\bar{I} - b\\,r$ sube → la demanda agregada sube → $Y$ sube.
+
+<span class="intuition">Política monetaria expansiva en IS-LM clásica: baja $r$, sube $Y$. Política monetaria contractiva: lo contrario. Esta es la lógica básica del banco central manejando la tasa de política.</span>`,
+    reference: "Pres. 33 · política monetaria",
+  }),
+  Q({
+    id: "t8-c19",
+    taller: 8, topic: "trampa-liquidez", difficulty: "avanzado", type: "mcq",
+    prompt: "En la <em>trampa de liquidez</em> (LM horizontal a $r$ = piso), un aumento de la oferta monetaria $\\uparrow M^s$:",
+    options: [
+      "No tiene efecto sobre $Y$ ni sobre $r$.",
+      "Tiene un efecto máximo sobre $Y$.",
+      "Reduce $Y$ porque eleva $r$.",
+      "Sólo es efectiva con expectativas adaptativas.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>¿Qué es la trampa de liquidez?</span>
+Cuando $r$ ya está cerca de cero (límite inferior efectivo, ZLB) y la sensibilidad de la demanda de dinero a $r$ se hace infinita ($\\ell \\to \\infty$), la curva LM se vuelve <em>horizontal</em>.
+
+<span class="step"><span class="step-num">2</span>Efecto de $\\uparrow M^s$</span>
+Aumentar $M^s$ desplaza LM hacia la derecha, pero como LM es horizontal en el tramo relevante, el desplazamiento se "absorbe" en el tramo plano sin cambiar la posición del equilibrio: $r$ no baja (ya está en piso) y $Y$ no sube.
+
+<span class="step"><span class="step-num">3</span>¿Por qué no funciona?</span>
+La gente atesora el dinero adicional: están dispuestos a quedarse con saldos a la tasa que ya hay, porque no esperan ganancias por prestar. La política monetaria estándar pierde tracción.
+
+<span class="step"><span class="step-num">4</span>¿Qué sí funciona?</span>
+<ul>
+<li>Política fiscal (en trampa de liquidez es <strong>máximamente efectiva</strong>: no hay crowding-out).</li>
+<li>Forward guidance / política no convencional (QE, compras de activos).</li>
+<li>Aumentar $\\pi^e$ para reducir $r = i - \\pi^e$.</li>
+</ul>
+
+<span class="intuition">La trampa de liquidez es la pesadilla de un banco central: imprimir dinero deja de funcionar. Por eso en 2008-2020 la FED, BCE y BOJ recurrieron a QE: comprar bonos largos para bajar tasas de plazos largos cuando la corta ya estaba en cero.</span>`,
+    reference: "Pres. 34 · trampa de liquidez",
+  }),
+  Q({
+    id: "t8-c20",
+    taller: 8, topic: "is-lm-pendiente", difficulty: "intermedio", type: "mcq",
+    prompt: "La pendiente de la curva IS en el espacio $(Y, r)$ es <em>menos pronunciada</em> (más plana) cuando:",
+    options: [
+      "La inversión es muy sensible a $r$ (alto $b$) y la propensión a consumir $c$ es alta.",
+      "La inversión es poco sensible a $r$ (bajo $b$).",
+      "El gasto público es alto.",
+      "La oferta monetaria es baja.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Forma reducida de la IS</span>
+A partir de $Y = c(Y - T) + I(r) + G$ con $I(r) = \\bar{I} - b\\,r$ y simplificando:
+<span class="formula">$Y = \\dfrac{1}{1-c}\\big[\\bar{C} + \\bar{I} + G - cT - b\\,r\\big]$</span>
+Pendiente: $\\dfrac{\\partial r}{\\partial Y} = -\\dfrac{1-c}{b}$.
+
+<span class="step"><span class="step-num">2</span>¿Cuándo es más plana?</span>
+"Más plana" significa $|\\partial r/\\partial Y|$ pequeño:
+<ul>
+<li>$b$ grande (inversión muy sensible a $r$): cualquier movimiento pequeño de $r$ provoca un gran cambio en $I$ y por tanto en $Y$ vía multiplicador.</li>
+<li>$c$ grande ($1-c$ pequeño): multiplicador $1/(1-c)$ grande, así que pequeños cambios de $r$ generan grandes cambios de $Y$.</li>
+</ul>
+
+<span class="step"><span class="step-num">3</span>Implicaciones</span>
+IS plana ⇒ política monetaria <strong>muy efectiva</strong> (mover $r$ mueve mucho $Y$); política fiscal <em>menos</em> efectiva (mucho crowding-out).
+IS empinada (lo opuesto) ⇒ política fiscal muy efectiva; monetaria poco efectiva.
+
+<span class="intuition">$b$ y $c$ son los "amplificadores" del lado real. Si la economía es sensible a la tasa de interés y propensa a consumir, la curva IS responde mucho a $r$.</span>`,
+    reference: "Pres. 31 · pendiente IS",
+  }),
+  Q({
+    id: "t8-tf07",
+    taller: 8, topic: "trampa-liquidez", difficulty: "intermedio", type: "tf-justify",
+    prompt: "Cuando la economía está en trampa de liquidez, una expansión fiscal ($\\uparrow G$) tiene efecto multiplicador <em>mayor</em> al multiplicador convencional de IS-LM.",
+    options: [
+      "Verdadero. Sin crowding-out, el efecto es el multiplicador keynesiano puro $1/(1-c)$.",
+      "Falso. La política fiscal nunca funciona en trampa de liquidez.",
+      "Verdadero, pero solo en economías cerradas grandes.",
+      "Falso. El multiplicador es siempre el mismo.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Multiplicador convencional IS-LM</span>
+<span class="formula">$\\dfrac{\\partial Y}{\\partial G} = \\dfrac{1}{(1-c) + \\dfrac{b\\,k}{\\ell}}$</span>
+El término $bk/\\ell$ es el "ajuste por LM": cuando $G$ sube, $Y$ sube, lo que sube la demanda de dinero, lo que sube $r$, lo que reduce $I$ (crowding-out parcial).
+
+<span class="step"><span class="step-num">2</span>En trampa de liquidez $\\ell \\to \\infty$</span>
+$bk/\\ell \\to 0$, así que el multiplicador colapsa a:
+<span class="formula">$\\dfrac{\\partial Y}{\\partial G} = \\dfrac{1}{1-c}$</span>
+que es el multiplicador <strong>keynesiano puro</strong> de la cruz keynesiana, sin crowding-out.
+
+<span class="step"><span class="step-num">3</span>Intuición</span>
+Como $r$ no se mueve (LM horizontal), no hay caída de $I$ que neutralice el aumento de $G$. Todo el estímulo fiscal pasa íntegro al producto.
+
+<span class="intuition">Por eso en 2008-2009 muchos macroeconomistas (Krugman, DeLong, Eichengreen) defendieron estímulos fiscales agresivos: con tasas en cero, el multiplicador era máximo. Es la situación opuesta a una economía sobrecalentada con LM vertical, donde el crowding-out es total.</span>`,
+    reference: "Pres. 34 · efectividad de política",
+  }),
+
+  // ---- BATCH NUEVO · T9 (Mundell-Fleming, economía abierta) ----
+  Q({
+    id: "t9-c17",
+    taller: 9, topic: "mf-flexible", difficulty: "intermedio", type: "mcq",
+    prompt: "En Mundell-Fleming con tipo de cambio <em>flexible</em> y movilidad perfecta de capitales, una expansión fiscal ($\\uparrow G$) produce:",
+    options: [
+      "Apreciación de la moneda doméstica y $Y$ no cambia.",
+      "Depreciación y aumento de $Y$.",
+      "Apreciación y aumento de $Y$.",
+      "Depreciación y caída de $Y$.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Las tres curvas de MF</span>
+<ul>
+<li>IS$^*$: $Y = c(Y-T) + I(r^*) + G + NX(\\varepsilon)$</li>
+<li>LM$^*$: $\\dfrac{M}{P} = k\\,Y - \\ell\\,r^*$</li>
+<li>$r = r^*$ (movilidad perfecta de capitales)</li>
+</ul>
+LM$^*$ con $r = r^*$ fijo se vuelve <strong>vertical en $Y$</strong> en el espacio $(Y, \\varepsilon)$.
+
+<span class="step"><span class="step-num">2</span>Efecto de $\\uparrow G$</span>
+$\\uparrow G$ desplaza IS$^*$ hacia la derecha. Pero LM$^*$ es vertical y no se mueve. Entonces $Y$ no cambia. ¿Cómo se ajusta?
+
+<span class="step"><span class="step-num">3</span>Mecanismo del tipo de cambio</span>
+Con IS$^*$ desplazada, a $Y$ original se requeriría $r$ mayor. Pero $r$ no puede subir porque $r = r^*$. Entran capitales atraídos por la prima implícita, lo que <em>aprecia</em> la moneda ($\\varepsilon \\uparrow$), lo que reduce las exportaciones netas $NX$, lo que devuelve IS$^*$ a su posición original. Resultado: $G \\uparrow$, $NX \\downarrow$, $Y$ igual.
+
+<span class="step"><span class="step-num">4</span>Conclusión clave</span>
+<strong>Inefectividad fiscal con TC flex y movilidad perfecta.</strong> El estímulo fiscal solo cambia la composición del producto (más $G$, menos $NX$), no el nivel.
+
+<span class="intuition">Esto es lo opuesto al caso de TC fijo (donde la fiscal es muy efectiva). La regla mnemotécnica: TC flex ⇒ monetaria efectiva, fiscal inefectiva. TC fijo ⇒ fiscal efectiva, monetaria inefectiva. Es el "trilema" en acción.</span>`,
+    reference: "Pres. 38 · MF flex",
+  }),
+  Q({
+    id: "t9-c18",
+    taller: 9, topic: "mf-fijo", difficulty: "intermedio", type: "mcq",
+    prompt: "En Mundell-Fleming con tipo de cambio <em>fijo</em> y movilidad perfecta de capitales, una expansión monetaria ($\\uparrow M$) produce:",
+    options: [
+      "$Y$ no cambia; el banco central pierde reservas y $M$ vuelve a su nivel inicial.",
+      "$Y$ aumenta y la moneda se deprecia.",
+      "$Y$ aumenta y la moneda se aprecia.",
+      "Inflación inmediata sin cambio en $Y$.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>$\\uparrow M$ desplazaría LM$^*$ a la derecha</span>
+A primera instancia, más dinero ofrecido tendería a bajar $r$ por debajo de $r^*$.
+
+<span class="step"><span class="step-num">2</span>Pero el TC está fijo</span>
+Con $r &lt; r^*$ los capitales <em>salen</em> del país. La presión sobre la moneda es a la depreciación, pero el banco central se compromete a mantener $\\varepsilon$ fijo. ¿Cómo? Vendiendo reservas internacionales y comprando moneda doméstica.
+
+<span class="step"><span class="step-num">3</span>Esta intervención reduce $M^s$</span>
+Cada compra de moneda doméstica retira dinero de la economía. El banco central pierde reservas y $M^s$ se revierte hasta volver a su nivel inicial, donde $r = r^*$.
+
+<span class="step"><span class="step-num">4</span>Conclusión</span>
+$Y$ no cambia. La política monetaria queda <strong>endógenamente determinada</strong> por la defensa del TC. El BC pierde soberanía monetaria.
+
+<span class="intuition">Otro vértice del trilema: si fijas el TC y permites movilidad perfecta de capitales, sacrificas la independencia de la política monetaria. Es lo que enfrenta Hong Kong (peg con USD) o, en su momento, Argentina con la convertibilidad 1991-2001.</span>`,
+    reference: "Pres. 38 · MF fijo / trinidad imposible",
+  }),
+  Q({
+    id: "t9-p07b",
+    taller: 9, topic: "mf-flexible", difficulty: "intermedio", type: "open-numeric",
+    prompt: "En MF flex, $LM^*$: $\\dfrac{M}{P} = 0{,}5\\,Y - 100\\,r^*$, con $M/P = 200$ y $r^* = 4\\%$. Calcula el producto de equilibrio $Y$.",
+    correct: 1200,
+    tolerance: 1,
+    explanation: `<span class="step"><span class="step-num">1</span>Despeja $Y$ de LM$^*$</span>
+<span class="formula">$\\dfrac{M}{P} = k\\,Y - \\ell\\,r^* \\;\\;\\Rightarrow\\;\\; Y = \\dfrac{1}{k}\\left(\\dfrac{M}{P} + \\ell\\,r^*\\right)$</span>
+
+<span class="step"><span class="step-num">2</span>Sustituye los datos</span>
+<ul>
+<li>$k = 0{,}5$</li>
+<li>$\\ell = 100$</li>
+<li>$M/P = 200$</li>
+<li>$r^* = 4 = 0{,}04$ (en este problema $r$ se ingresa en %, por lo que $r^* = 4$)</li>
+</ul>
+<span class="formula">$Y = \\dfrac{1}{0{,}5}(200 + 100 \\cdot 4) = 2 \\cdot (200 + 400) = 2 \\cdot 600 = 1200$</span>
+
+<span class="step"><span class="step-num">3</span>Interpretación</span>
+En MF flex con movilidad perfecta, $LM^*$ por sí sola fija $Y$ (porque $r = r^*$ está dado). Cualquier shock de IS$^*$ (cambios en $G$, $T$, $C̄$, $\\bar{I}$) se absorbe vía el tipo de cambio, no vía $Y$.
+
+<span class="intuition">Es por eso que LM$^*$ vertical en $(Y, \\varepsilon)$: una vez fijos $M/P$ y $r^*$, $Y$ queda determinado. Si quieres mover $Y$ en MF flex, lo único que funciona es mover $M$ (política monetaria) o cambiar el régimen.</span>`,
+    reference: "Pres. 38 · MF flex equilibrio",
+  }),
+  Q({
+    id: "t9-c19",
+    taller: 9, topic: "trinidad", difficulty: "basico", type: "mcq",
+    prompt: "La <em>trinidad imposible</em> de Mundell establece que un país no puede tener simultáneamente:",
+    options: [
+      "TC fijo, movilidad perfecta de capitales y política monetaria autónoma.",
+      "Inflación baja, desempleo bajo y crecimiento alto.",
+      "Superávit fiscal, superávit comercial y baja inflación.",
+      "Mercados libres, regulación financiera y democracia.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Las tres aspiraciones</span>
+<ol>
+<li><strong>TC fijo</strong>: estabilidad cambiaria.</li>
+<li><strong>Movilidad perfecta de capitales</strong>: cuenta de capital abierta.</li>
+<li><strong>Política monetaria autónoma</strong>: el BC fija $i$ (o $M$) según los objetivos domésticos.</li>
+</ol>
+
+<span class="step"><span class="step-num">2</span>¿Por qué son incompatibles?</span>
+<ul>
+<li>Si fijas TC y abres capitales (1+2): para defender el TC el BC debe seguir $r^*$, perdiendo (3).</li>
+<li>Si abres capitales y mantienes monetaria autónoma (2+3): el TC tiene que flotar, perdiendo (1).</li>
+<li>Si fijas TC y quieres monetaria autónoma (1+3): debes restringir movimientos de capital, perdiendo (2).</li>
+</ul>
+
+<span class="step"><span class="step-num">3</span>Ejemplos reales</span>
+<ul>
+<li>USA: 2+3 (TC flex).</li>
+<li>Eurozona: 1+2 dentro del euro (sin política monetaria nacional).</li>
+<li>China histórica: 1+3 (con controles de capital).</li>
+</ul>
+
+<span class="intuition">Cualquier país tiene que elegir 2 de 3 vértices. La elección refleja prioridades de política. Colombia, por ejemplo, está en (2+3): TC flex, capitales abiertos, BanRep autónomo.</span>`,
+    reference: "Pres. 39 · trinidad imposible",
+  }),
+  Q({
+    id: "t9-c20",
+    taller: 9, topic: "marshall-lerner", difficulty: "avanzado", type: "mcq",
+    prompt: "La condición de <em>Marshall-Lerner</em> para que una depreciación mejore la balanza comercial requiere que:",
+    options: [
+      "La suma de las elasticidades-precio de exportaciones e importaciones (en valor absoluto) sea mayor que 1.",
+      "El TC nominal sea fijo.",
+      "Las exportaciones sean iguales a las importaciones.",
+      "La elasticidad ingreso de las importaciones sea menor que 1.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Efecto de una depreciación sobre $NX$</span>
+Una depreciación ($\\varepsilon \\uparrow$, en notación TC peso/USD por ejemplo) abarata las exportaciones para extranjeros y encarece las importaciones para residentes.
+<ul>
+<li>Volumen de exportaciones $X$: sube si los extranjeros responden mucho a precios (elasticidad $\\eta_X$ alta).</li>
+<li>Valor de importaciones $M$: depende de cuánto cae el volumen vs cuánto sube el precio en moneda doméstica.</li>
+</ul>
+
+<span class="step"><span class="step-num">2</span>Condición de Marshall-Lerner</span>
+Bajo el supuesto de balanza inicial equilibrada, la depreciación mejora $NX$ si y solo si:
+<span class="formula">$|\\eta_X| + |\\eta_M| &gt; 1$</span>
+
+<span class="step"><span class="step-num">3</span>¿Por qué? Curva J</span>
+En el corto plazo las elasticidades son bajas (los contratos están firmados, los volúmenes no cambian rápido). La balanza puede <em>empeorar</em> al inicio (curva J) y mejorar conforme las elasticidades de largo plazo se manifiestan.
+
+<span class="intuition">Si los bienes son muy específicos y los compradores tienen poca flexibilidad ($\\eta &lt; 0{,}5$), una devaluación puede empeorar las cuentas comerciales. Por eso devaluaciones grandes a veces no funcionan: depende de qué tan elástica es tu canasta de comercio.</span>`,
+    reference: "Pres. 37 · Marshall-Lerner",
+  }),
+  Q({
+    id: "t9-tf09",
+    taller: 9, topic: "trinidad", difficulty: "intermedio", type: "tf-justify",
+    prompt: "Bajo TC fijo y movilidad perfecta de capitales, el banco central <em>elige libremente</em> la tasa de interés doméstica para fines de estabilización.",
+    options: [
+      "Falso. La tasa doméstica queda atada a $r^*$; el BC pierde autonomía monetaria.",
+      "Verdadero. El BC siempre puede fijar $i$.",
+      "Falso. El BC fija $r$, pero no $i$.",
+      "Verdadero, pero solo si hay control de capitales.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Trinidad imposible: TC fijo + capitales abiertos</span>
+Con $r &lt; r^*$, sale capital, presiona la moneda a depreciarse, y el BC debe vender reservas (que reduce $M^s$ hasta restablecer $r = r^*$). Con $r &gt; r^*$, entra capital, presiona a apreciarse, y el BC compra reservas (que aumenta $M^s$ hasta restablecer $r = r^*$).
+
+<span class="step"><span class="step-num">2</span>Conclusión</span>
+La política monetaria queda <em>determinada endógenamente</em> por la defensa del TC fijo. El BC pierde la herramienta de tasa para fines de estabilización doméstica.
+
+<span class="step"><span class="step-num">3</span>¿Cómo recuperarla?</span>
+<ul>
+<li>Romper el peg (TC flexible).</li>
+<li>Imponer controles de capital (cerrar la cuenta de capital).</li>
+</ul>
+
+<span class="intuition">Argentina 2001: cuando la convertibilidad 1:1 colapsó, recuperaron política monetaria al precio de una devaluación enorme. China: mantiene autonomía monetaria con controles selectivos al capital.</span>`,
+    reference: "Pres. 39 · trinidad",
+  }),
+  Q({
+    id: "t9-c21",
+    taller: 9, topic: "tc-real-nominal", difficulty: "intermedio", type: "mcq",
+    prompt: "El tipo de cambio real $q$ se define como $q = \\dfrac{\\varepsilon \\, P^*}{P}$. Si la economía local tiene inflación 8% y el extranjero 2%, manteniendo $\\varepsilon$ constante, entonces $q$:",
+    options: [
+      "Cae aproximadamente 6% (apreciación real).",
+      "Sube aproximadamente 6% (depreciación real).",
+      "No cambia.",
+      "Sube 10%.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Toma logaritmos y diferencia</span>
+$\\ln q = \\ln \\varepsilon + \\ln P^* - \\ln P$. Diferenciando en el tiempo:
+<span class="formula">$\\hat{q} = \\hat{\\varepsilon} + \\pi^* - \\pi$</span>
+
+<span class="step"><span class="step-num">2</span>Sustituye los datos</span>
+<ul>
+<li>$\\hat{\\varepsilon} = 0$ (TC nominal constante)</li>
+<li>$\\pi^* = 2\\%$</li>
+<li>$\\pi = 8\\%$</li>
+</ul>
+<span class="formula">$\\hat{q} = 0 + 2\\% - 8\\% = -6\\%$</span>
+
+<span class="step"><span class="step-num">3</span>Interpretación</span>
+$q$ cae ⇒ <strong>apreciación real</strong>. Los bienes locales se hacen relativamente más caros frente a los extranjeros. Esto erosiona la competitividad de las exportaciones locales.
+
+<span class="intuition">Aunque el TC nominal no se mueva, si la inflación local supera a la externa, en términos reales tu moneda <em>se aprecia</em>. Es lo que vivieron varios países latinoamericanos en los 90 con anclas cambiarias e inflación persistente: TC nominal estable pero competitividad cayendo. La famosa "enfermedad holandesa" cambiaria.</span>`,
+    reference: "Pres. 36 · TC real",
+  }),
+  Q({
+    id: "t9-c22",
+    taller: 9, topic: "mf-fijo", difficulty: "intermedio", type: "mcq",
+    prompt: "En MF con TC fijo y movilidad perfecta, una expansión fiscal ($\\uparrow G$) produce:",
+    options: [
+      "Aumento de $Y$, sin cambio en $r$, y aumento de las reservas internacionales.",
+      "Aumento de $Y$ y depreciación de la moneda.",
+      "Sin cambio en $Y$, apreciación.",
+      "Caída de $Y$ por crowding-out total.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>$\\uparrow G$ desplaza IS$^*$ a la derecha</span>
+A nivel de equilibrio inicial, $r$ tendería a subir.
+
+<span class="step"><span class="step-num">2</span>Pero $r$ no puede subir bajo movilidad perfecta</span>
+Entran capitales (atraídos por $r &gt; r^*$ implícito), presionando a la moneda a apreciarse.
+
+<span class="step"><span class="step-num">3</span>El BC defiende el peg</span>
+Para evitar la apreciación, el BC <em>compra reservas</em> (vende moneda doméstica). Esto expande $M^s$, lo que desplaza LM$^*$ a la derecha hasta restablecer $r = r^*$ con $Y$ mayor.
+
+<span class="step"><span class="step-num">4</span>Resultado final</span>
+<ul>
+<li>$Y$ aumenta (efecto multiplicador máximo, sin crowding-out vía $r$).</li>
+<li>$r$ vuelve a $r^*$.</li>
+<li>Reservas suben.</li>
+<li>$M^s$ sube endógenamente.</li>
+</ul>
+
+<span class="intuition">TC fijo "amplifica" la política fiscal: el BC se ve forzado a acomodar monetariamente para mantener el peg. Es por eso que en regímenes de TC fijo la disciplina fiscal es CRÍTICA: el déficit se monetiza automáticamente.</span>`,
+    reference: "Pres. 38 · MF fijo fiscal",
+  }),
+  Q({
+    id: "t9-tf10",
+    taller: 9, topic: "mf-flexible", difficulty: "avanzado", type: "tf-justify",
+    prompt: "Bajo MF flex, una contracción monetaria del país extranjero ($\\downarrow M^*$, lo que sube $r^*$) genera depreciación de la moneda doméstica y aumenta $Y$.",
+    options: [
+      "Verdadero. ↑r* hace que $r &lt; r^*$, sale capital, la moneda se deprecia, $NX \\uparrow$, IS$^*$ se desplaza a la derecha y $Y \\uparrow$.",
+      "Falso. ↑r* aprecia automáticamente la moneda doméstica.",
+      "Verdadero, pero solo en países desarrollados.",
+      "Falso. La tasa internacional no afecta a economías pequeñas.",
+    ],
+    correct: 0,
+    explanation: `<span class="step"><span class="step-num">1</span>Efecto inicial de $\\uparrow r^*$</span>
+La condición $r = r^*$ ya no se cumple inicialmente: $r$ doméstico (digamos 4%) queda por debajo de $r^*$ (digamos 6%). Salen capitales hacia el exterior.
+
+<span class="step"><span class="step-num">2</span>Ajuste del TC</span>
+La salida de capitales presiona la moneda doméstica a <em>depreciarse</em> ($\\varepsilon \\uparrow$). Eso abarata las exportaciones y encarece las importaciones, así que $NX \\uparrow$.
+
+<span class="step"><span class="step-num">3</span>Efecto sobre IS$^*$ y $Y$</span>
+$NX \\uparrow$ desplaza IS$^*$ a la derecha. En LM$^*$ (vertical en $Y$ con $r = r^*$), el equilibrio se mueve a la derecha: $Y \\uparrow$.
+
+<span class="step"><span class="step-num">4</span>Caso real</span>
+Cuando la FED sube tasas, países emergentes con TC flex (Colombia, Brasil, México) suelen ver depreciaciones. Pero el efecto sobre $Y$ depende de qué tan elásticas sean sus exportaciones (Marshall-Lerner). En el corto plazo, la depreciación puede generar inflación importada antes de impulsar $NX$.
+
+<span class="intuition">Bajo MF flex el TC actúa como amortiguador: shocks externos se absorben en el precio del cambio, no en cantidades. Es la gran ventaja del régimen flexible vs fijo.</span>`,
+    reference: "Pres. 38-39 · shocks externos MF",
+  }),
+  Q({
+    id: "t9-p09",
+    taller: 9, topic: "mf-flexible", difficulty: "avanzado", type: "open-numeric",
+    prompt: "En MF flex, supongamos $C = 100 + 0{,}75(Y - T)$, $I = 200 - 25\\,r$, $G = 100$, $T = 100$, $NX = 150 - 50\\,q$, $r^* = 4$. Calcula el tipo de cambio real de equilibrio $q$ (a 2 decimales), dado que LM$^*$ fija $Y = 1000$.",
+    correct: 2.5,
+    tolerance: 0.05,
+    explanation: `<span class="step"><span class="step-num">1</span>Plantea IS$^*$</span>
+$Y = C + I + G + NX$
+<span class="formula">$Y = [100 + 0{,}75(Y - 100)] + [200 - 25\\,r^*] + 100 + [150 - 50\\,q]$</span>
+
+<span class="step"><span class="step-num">2</span>Sustituye $r^* = 4$ y $Y = 1000$</span>
+<ul>
+<li>$C = 100 + 0{,}75 \\cdot 900 = 100 + 675 = 775$</li>
+<li>$I = 200 - 25 \\cdot 4 = 200 - 100 = 100$</li>
+<li>$G = 100$</li>
+<li>$NX = 150 - 50q$</li>
+</ul>
+<span class="formula">$1000 = 775 + 100 + 100 + (150 - 50q) = 1125 - 50q$</span>
+
+<span class="step"><span class="step-num">3</span>Despeja $q$</span>
+<span class="formula">$50q = 1125 - 1000 = 125 \\;\\;\\Rightarrow\\;\\; q = 2{,}5$</span>
+
+<em>Nota: La respuesta esperada $q \\approx 2{,}5$ representa un TC real depreciado. Si en tu cálculo te da otro valor, revisa los signos de $NX$.</em>
+
+<span class="intuition">El TC real $q$ es la variable que se ajusta endógenamente para que la cantidad demandada agregada sea consistente con el $Y$ que LM$^*$ fija. Si IS$^*$ y LM$^*$ no se cruzan al $q$ inicial, el TC real se mueve hasta que sí.</span>`,
+    reference: "Pres. 38 · MF flex equilibrio",
   }),
 ];
 

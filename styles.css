@@ -362,6 +362,58 @@ label.field {
   font-style: italic;
 }
 
+.explanation {
+  margin-top: 10px;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.explanation .step {
+  margin: 12px 0 4px;
+  font-weight: 800;
+  color: var(--ink);
+  display: block;
+}
+.explanation .step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  margin-right: 8px;
+}
+.explanation .formula {
+  display: block;
+  margin: 8px 0;
+  padding: 10px 12px;
+  background: rgba(15, 139, 141, 0.07);
+  border-left: 3px solid var(--teal);
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.96rem;
+}
+.explanation .intuition {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: rgba(201, 139, 33, 0.08);
+  border-left: 3px solid var(--amber);
+  border-radius: 6px;
+  font-style: italic;
+  color: #5a4517;
+}
+.explanation .intuition::before {
+  content: "💡 Intuición · ";
+  font-weight: 800;
+  font-style: normal;
+}
+.explanation ul, .explanation ol { margin: 8px 0; padding-left: 24px; }
+.explanation li { margin: 4px 0; }
+.review-explanation { color: var(--ink); }
+
 .review {
   display: grid;
   gap: 12px;

@@ -103,7 +103,6 @@ function filterPool(allQuestions, config) {
 // ---- Renderizado de pregunta ----
 function renderTags(q) {
   const labels = {
-    3: "Taller 3 · Sistema monetario",
     5: "Taller 5 · Desempleo",
     7: "Taller 7 · DA-OA",
     8: "Taller 8 · IS-LM",
@@ -154,7 +153,7 @@ function renderFeedback(q, state) {
   return `<div class="feedback ${cls}">
     <strong>${state.correct ? "✓ ¡Correcto!" : "✗ Incorrecto."}</strong>
     ${state.correct ? "" : `<br/>${correctLabel}`}
-    <p style="margin: 6px 0 0">${esc(q.explanation || "")}</p>
+    <div class="explanation">${q.explanation || ""}</div>
     ${q.reference ? `<span class="ref">${esc(q.reference)}</span>` : ""}
   </div>`;
 }
@@ -173,7 +172,6 @@ function renderSetup() {
     seed: 0,
   };
   const tallerOptions = [
-    { id: 3, label: "Taller 3 · Sistema monetario e inflación (apoyo)" },
     { id: 5, label: "Taller 5 · Desempleo" },
     { id: 7, label: "Taller 7 · Fluctuaciones y demanda agregada" },
     { id: 8, label: "Taller 8 · IS-LM" },
@@ -550,7 +548,7 @@ function renderResults() {
       <div class="review-q">${q.prompt}</div>
       <p style="color:${givenColor};margin:4px 0 0;font-size:0.9rem;"><strong>Tu respuesta:</strong> ${esc(userTxt)}</p>
       <p class="review-correct" style="color:var(--green);"><strong>Respuesta correcta:</strong> ${esc(correctTxt)}</p>
-      <p style="margin:6px 0 0;color:var(--muted);font-size:0.88rem">${q.explanation || ""}</p>
+      <div class="explanation review-explanation">${q.explanation || ""}</div>
       ${q.reference ? `<p style="margin:4px 0 0;color:var(--muted);font-size:0.8rem;font-style:italic;">${esc(q.reference)}</p>` : ""}
     </div>`;
   }).join("");
